@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for i in "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"; do
+	touch $(perl -e 'print "'"$i"'"x250').txt
+done

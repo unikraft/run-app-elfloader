@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if test $# -ne 1; then
+    echo "Usage: $0 number-of-simultaneous-processes" 1>&2
+    exit 1
+fi
+
+for ((i = 0; i < $1; i++)); do
+    ./yield &
+done

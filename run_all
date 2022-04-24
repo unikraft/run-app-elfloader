@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if test $# -ne 1; then
+    echo "Usage: $0 <file/with/inputs>" 1>&2
+    exit 1
+fi
+
+file_with_inputs="$1"
+
+while read f; do
+    echo -e "\n\n### $f\n\n"
+    (
+    timeout 5 ./run_elfloader_net_arg "$f" &
+    sudo pkill -f qemu-system
+    sleep 1
+    )
+done < "$file_with_inputs"
