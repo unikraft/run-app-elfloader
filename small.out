@@ -1,0 +1,3 @@
+### small/socket/call_socket
+
+(call_socket.c, 34): socket: Remote address changed (errno: 78)
