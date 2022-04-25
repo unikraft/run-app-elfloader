@@ -1,0 +1,3 @@
+[submodule "binary-tools"]
+	path = binary-tools
+	url = https://github.com/mosajjal/binary-tools
