@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if test $# -ne 1; then
+    echo "Usage: $0 folder" 1>&2
+    exit 1
+fi
+
+if test ! -d "$1"; then
+    echo "Error: $1 is not a folder" 1>&2
+    exit 1
+fi
+
+find "$1" -type f | \
+while read f; do
+    file "$f" | grep "ELF" | grep -q -v "relocatable" && \
+        ldd "$f" 2>&1 | grep -q '\(static\|ot a dynamic\)' && \
+        (checksec --file="$f" | grep -q 'No PIE' || \
+        echo "$f")
+done
