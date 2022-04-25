@@ -13,3 +13,9 @@ Run the binaries using:
 ```
 
 Results are summarized in the `so_demo.out` file.
+
+You can generate an executable / binary list for a given folder with the `print_exec_list` script:
+
+```
+./print_exec_list small
+```
