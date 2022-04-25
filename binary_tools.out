@@ -1,0 +1,166 @@
+### binary-tools/x64/suricata
+
+
+/proc/self/exe
+
+### binary-tools/x64/htop
+
+
+/proc/self/exe
+
+### binary-tools/x64/vim
+
+
+/proc/self/exe
+
+### binary-tools/x64/socat
+
+
+/proc/self/exe
+
+### binary-tools/x64/redir
+
+
+/proc/self/exe
+
+### binary-tools/x64/pv
+
+
+/proc/self/exe
+
+### binary-tools/x64/wireshark/dumpcap
+
+
+/proc/self/exe
+
+### binary-tools/x64/corkscrew
+
+
+corkscrew 2.0 (agroman@agroman.net)
+usage: corkscrew <proxyhost> <proxyport> <desthost> <destport> [authfile]
+
+
+### binary-tools/x64/ngrep
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/ifpps
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/mausezahn
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/flowtop
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/trafgen
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/netsniff-ng
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/astraceroute
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/bpfc
+
+
+/proc/self/exe
+
+### binary-tools/x64/netsniff/curvetun
+
+
+/proc/self/exe
+
+### binary-tools/x64/fish
+
+
+/proc/self/exe
+
+### binary-tools/x64/wg
+
+
+/proc/self/exe
+
+### binary-tools/x64/tiny
+
+
+/proc/self/exe
+
+### binary-tools/x64/grex
+
+
+/proc/self/exe
+
+### binary-tools/x64/zenith
+
+
+/proc/self/exe
+
+### binary-tools/x64/logtop
+
+
+/proc/self/exe
+
+### binary-tools/x64/merino
+
+
+/proc/self/exe
+
+### binary-tools/x64/zmap/zgrab2
+
+
+/proc/self/exe
+
+### binary-tools/x64/pdns
+
+
+/proc/self/exe
+
+### binary-tools/x64/nmap
+
+
+/proc/self/exe
+
+### binary-tools/x64/dropbear/dropbearconvert
+
+
+/proc/self/exe
+
+### binary-tools/x64/dropbear/dropbearkey
+
+
+/proc/self/exe
+
+### binary-tools/x64/dropbear/scp
+
+
+/proc/self/exe
+
+### binary-tools/x64/dropbear/dropbear
+
+
+/proc/self/exe
+
+### binary-tools/x64/dropbear/dbclient
+
+
+/proc/self/exe
+
+### binary-tools/x64/tcpdump
+
+
+/proc/self/exe
