@@ -22,18 +22,6 @@ The futex facility returned an unexpected error code.
 
 The futex facility returned an unexpected error code.
 
-### so-demo/curs-02-demo/truncate/truncate
-
-(truncate.c, 19): open: Operation not permitted
-
-### so-demo/curs-02-demo/save-fd/save-fd
-
-(save-fd.c, 16): open: Operation not permitted
-
-### so-demo/curs-02-demo/sparse-file/sparse-file
-
-(sparse-file.c, 22): open: Operation not permitted
-
 ### so-demo/curs-10-demo/ioctl/hwaddr-ioctl
 
 (hwaddr-ioctl.c, 29): socket: Remote address changed
