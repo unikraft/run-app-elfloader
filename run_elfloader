@@ -90,7 +90,6 @@ done
 shift $((${OPTIND}-1))
 
 if test "$#" -lt 1; then
-    echo "$#"
     usage
 fi
 
