@@ -10,7 +10,7 @@ file_with_inputs="$1"
 while read f; do
     echo -e "\n\n### $f\n\n"
     (
-    timeout 5 ./run_elfloader_net_arg "$f" &
+    timeout 5 ./run_elfloader "$f" &
     sudo pkill -f qemu-system
     sleep 1
     )
