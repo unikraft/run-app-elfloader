@@ -1,6 +1,0 @@
-[submodule "binary-tools"]
-	path = binary-tools
-	url = https://github.com/mosajjal/binary-tools
-[submodule "built-apps"]
-	path = built-apps
-	url = https://github.com/unikraft-io/built-apps.git
