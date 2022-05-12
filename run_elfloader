@@ -108,7 +108,7 @@ if test "$use_kvm" -eq 1; then
 fi
 
 if test "$start_in_debug_mode" -eq 1; then
-    arguments+="-s "
+    arguments+="-s -S "
 fi
 
 if test "$use_networking" -eq 1; then
