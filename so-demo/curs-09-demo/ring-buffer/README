@@ -1,3 +1,0 @@
-Run make to compile.
-
-Run ./producer_consumer to use ring buffer in classical producer-consumer problem.
