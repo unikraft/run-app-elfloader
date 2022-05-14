@@ -86,7 +86,7 @@ Note the rootfs contents were copied beforehand.
 ```
 $ cp -r ../static-pie-apps/redis/rootfs/* rootfs/
 
-$ ./run_elfloader -n -k ../static-pie-apps/redis/redis-server redis.conf
+$ ./run_elfloader -n ../static-pie-apps/redis/redis-server redis.conf
 
 Creating bridge uk0 if it does not exist ...
 Adding IP address 172.44.0.1 to bridge uk0 ...
