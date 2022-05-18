@@ -44,7 +44,7 @@ These need to be copied to be used.
 For example, to run the `sqlite3` executable using the ELF loader, use:
 
 ```
-$ ./run_elfloader ../static-pie-apps/sqlite3/sqlite3
+$ ./run_elfloader -r ../static-pie-apps/sqlite3/rootfs/ ../static-pie-apps/sqlite3/sqlite3
 [...]
 qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000001H:ECX.svm [bit 2]
 SeaBIOS (version 1.13.0-1ubuntu1.1)
@@ -81,12 +81,9 @@ When running a server / network application, networking is required.
 The `-n` option creates a bridge (`uk0`) and runs the specific actions to provide networking support.
 
 Below is the command to run the `redis-server` application with the ELF Loader.
-Note the rootfs contents were copied beforehand.
 
 ```
-$ cp -r ../static-pie-apps/redis/rootfs/* rootfs/
-
-$ ./run_elfloader -n ../static-pie-apps/redis/redis-server redis.conf
+$ ./run_elfloader -r ../static-pie-apps/redis/rootfs/ -n ../static-pie-apps/redis/redis-server redis.conf
 
 Creating bridge uk0 if it does not exist ...
 Adding IP address 172.44.0.1 to bridge uk0 ...
