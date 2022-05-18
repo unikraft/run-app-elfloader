@@ -81,7 +81,6 @@ When running a server / network application, networking is required.
 The `-n` option creates a bridge (`uk0`) and runs the specific actions to provide networking support.
 
 Below is the command to run the `redis-server` application with the ELF Loader.
-Note the rootfs contents were copied beforehand.
 
 ```
 $ ./run_elfloader -r ../static-pie-apps/redis/rootfs/ -n ../static-pie-apps/redis/redis-server redis.conf
