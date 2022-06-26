@@ -152,28 +152,39 @@ oOo oOO| | | | |   (| | | (_) |  _) :_
 
 It is often the case you want to debug the unikernel running image using a debugger such as GDB.
 This is enabled by the `-g` option of the `run_elfloader` script, together with the use of the `.dbg` image and the `debug.sh` script.
-Note that this is not trivial for the loaded static PIE ELF, as symbols are not present for that.
-You can still trace Unikraft system calls that are made by the ELF at runtime.
+
+Note that GDB does not load the static PIE ELF's symbols automatically (see [app-elfloader#debugging-elf-apps](https://github.com/unikraft/app-elfloader/blob/lyon-hackathon/README.md#debugging-elf-apps)).
+To load those symbols, we need to know the start address which the ELF is loaded to.
+Run `run_elfloader` to find the start address:
+
+```
+$ ./run_elfloader -k app-elfloader_kvm-x86_64.dbg ../static-pie-apps/lang/c/helloworld
+[...]
+[    5.241754] dbg:  [appelfloader] <elf_exec.c @   70> [...]/app-elfloader_kvm-x86_64.dbg: start: 0x3fe01000
+[...]
+```
+
+Here the start address is `0x3fe01000`.
 
 To start a debugging session, run the `run_elfloader` script with the corresponding options:
 
 ```
-$ ./run_elfloader -g -k app-elfloader_kvm-x86_64.dbg ../static-pie-apps/sqlite3/sqlite3
+$ ./run_elfloader -g -k app-elfloader_kvm-x86_64.dbg ../static-pie-apps/lang/c/helloworld
 ```
 
 It will hang waiting for debugging inputs.
 
-On another console start the actual debugging interface by running the `debug.sh` script withe `.dbg` image as its argument:
+On another console start the actual debugging interface by running the `debug.sh` script with the `.dbg` image, the ELF file and it's offset (both required for ELF symbols) as its arguments:
 
 ```
-unikraft@wasp:~/bin-compat/apps/run-app-elfloader$ ./debug.sh app-elfloader_kvm-x86_64.dbg 
-+ gdb '--eval-command=target remote :1234' -ex 'set confirm off' -ex 'set pagination off' -ex 'hbreak _libkvmplat_start64' -ex 'hbreak _libkvmplat_entry' -ex c -ex disconnect -ex 'set arch i386:x86-64:intel' -ex 'target remote localhost:1234' app-elfloader_kvm-x86_64.dbg
+ubuntu@vm-11:~/workdir/apps/run-app-elfloader$ ./debug.sh -e ../static-pie-apps/lang/c/helloworld -o 0x3fe01000 app-elfloader_kvm-x86_64.dbg
++ gdb '--eval-command=target remote :1234' -ex 'set confirm off' -ex 'set pagination off' -ex 'hbreak _libkvmplat_start64' -ex 'hbreak _libkvmplat_entry' -ex c -ex disconnect -ex 'set arch i386:x86-64:intel' [...]
 [...]
 Reading symbols from app-elfloader_kvm-x86_64.dbg...
 Remote debugging using :1234
 0x000000000000fff0 in ?? ()
 Hardware assisted breakpoint 1 at 0x10503f: file /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/entry64.S, line 158.
-Hardware assisted breakpoint 2 at 0x106ce0: file /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/setup.c, line 261.
+Hardware assisted breakpoint 2 at 0x106d00: file /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/setup.c, line 261.
 Continuing.
 
 Breakpoint 1, _libkvmplat_start64 () at /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/entry64.S:158
@@ -183,7 +194,7 @@ The target architecture is assumed to be i386:x86-64:intel
 Remote debugging using localhost:1234
 _libkvmplat_start64 () at /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/entry64.S:158
 158             movq $bootstack, %rsp
-(gdb) quit
-Detaching from program: /home/unikraft/bin-compat/apps/run-app-elfloader/app-elfloader_kvm-x86_64.dbg, process 1
-Ending remote debugging.
+add symbol table from file "../static-pie-apps/lang/c/helloworld" with all sections offset by 0x3fe01000
+Reading symbols from ../static-pie-apps/lang/c/helloworld...
+(gdb)
 ```
