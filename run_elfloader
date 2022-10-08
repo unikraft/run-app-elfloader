@@ -66,7 +66,7 @@ while getopts "dhngk:r:" OPT; do
         n)
             use_networking=1
             ;;
-        n)
+        d)
             use_kvm=0
             ;;
         h)
@@ -96,7 +96,11 @@ fi
 exec_to_load="$1"
 shift
 
-arguments="-cpu host -m 2G -nographic -nodefaults "
+if test "$use_kvm" -eq 1; then
+    arguments="-cpu host -m 2G -nographic -nodefaults "
+else
+    arguments="-m 2G -nographic -nodefaults "
+fi
 arguments+="-display none -serial stdio -device isa-debug-exit "
 arguments+="-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
 arguments+="-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=rootfs "
