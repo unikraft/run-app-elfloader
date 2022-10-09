@@ -96,11 +96,7 @@ fi
 exec_to_load="$1"
 shift
 
-if test "$use_kvm" -eq 1; then
-    arguments="-cpu host -m 2G -nographic -nodefaults "
-else
-    arguments="-m 2G -nographic -nodefaults "
-fi
+arguments="-m 2G -nographic -nodefaults "
 arguments+="-display none -serial stdio -device isa-debug-exit "
 arguments+="-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
 arguments+="-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=rootfs "
@@ -108,7 +104,7 @@ arguments+="-kernel $kvm_image "
 arguments+="-initrd $exec_to_load "
 
 if test "$use_kvm" -eq 1; then
-    arguments+="-enable-kvm "
+    arguments+="-enable-kvm -cpu host "
 fi
 
 if test "$start_in_debug_mode" -eq 1; then
