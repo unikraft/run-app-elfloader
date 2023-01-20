@@ -1,12 +1,12 @@
 # Run App ELF Loader
 
 Run Unikraft ELF loader app on Linux binaries, i.e. binary compatibility mode.
-Supported Linux executables must be built using `-static-pie`.
+Supported Linux executables must be built using either `-static-pie` or `-pie`.
 
 A list of pre-built Linux executables are located in the [`static-pie-apps` repository](https://github.com/unikraft/static-pie-apps).
 
-A pre-built ELF loader app image for KVM is provided in the `app-elfloader_kvm-x86_64` file.
-This is used to load and run Linux static PIE ELF files.
+A pre-built ELF loader app image for KVM is provided in the `elfld-preview~22.12_kvm-x86_64` file.
+This is used to load and run Linux PIE ELF files.
 
 Use the `run_elfloader` script to run an ELF file:
 
@@ -38,7 +38,7 @@ Start QEMU/KVM for ELF Loader app
 
 The `rootfs/` folder stores the filesystem that will be used by the loaded ELF via 9pfs.
 It may require being populated with corresponding files.
-The files to be used by each particular ELF file are located in the [`static-pie-apps` repository](https://github.com/unikraft/static-pie-apps) in the `rootfs/` folder foe each application.
+The files to be used by each particular ELF file are located in the [`static-pie-apps` repository](https://github.com/unikraft/static-pie-apps) in the `rootfs/` folder for each application.
 These need to be copied to be used.
 
 For example, to run the `sqlite3` executable using the ELF loader, use:
@@ -194,4 +194,25 @@ _libkvmplat_start64 () at /home/unikraft/bin-compat/unikraft.sched-refactor/plat
 add symbol table from file "../static-pie-apps/lang/c/helloworld" with all sections offset by 0x3fe01000
 Reading symbols from ../static-pie-apps/lang/c/helloworld...
 (gdb)
+```
+
+## Running non-static PIE ELF files
+
+Running a non-static PIE ELF file involves multiple steps. First, copy the ELF file to `rootfs`, along with all the dynamic libraries it depends on. Run `ldd` on the Linux executable to list its dependencies.
+
+```
+$ cp ~/example-apps/hello-world rootfs/
+$ ldd rootfs/hello-world
+        linux-vdso.so.1 (0x00007fff8cf58000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc92b980000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fc92b964000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fc92bbcb000)
+
+$ cp /lib/x86_64-linux-gnu/libc.so.6 /lib/x86_64-linux-gnu/libz.so.1 /lib64/ld-linux-x86-64.so.2 rootfs/
+```
+
+Non-static PIE ELF files are not executed directly. Instead, Unikraft ELF loader executes the Linux dynamic loader (`ld-linux-x86-64.so.2`), which in turn loads the Linux PIE ELF file and its dependencies. The ELF file is given as an argument to the dynamic loader. Consult the [manual page](https://man7.org/linux/man-pages/man8/ld.so.8.html) for more information regarding the command-line arguments passed to the Linux dynamic loader.
+
+```
+$ ./run_elfloader rootfs/ld-linux-x86-64.so.2 --library-path / /hello-world
 ```
