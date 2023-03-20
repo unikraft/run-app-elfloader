@@ -99,7 +99,7 @@ shift
 arguments="-m 2G -nographic -nodefaults "
 arguments+="-display none -serial stdio -device isa-debug-exit "
 arguments+="-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
-arguments+="-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=rootfs "
+arguments+="-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=fs0 "
 arguments+="-kernel $kvm_image "
 arguments+="-initrd $exec_to_load "
 
