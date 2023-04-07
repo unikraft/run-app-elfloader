@@ -2,3 +2,5 @@
 *.o
 *.class
 *.pyc
+.gdb_history
+peda-session*
