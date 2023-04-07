@@ -60,11 +60,11 @@ set -x
 #   -ex "hbreak lwip_socket" \
 #   -ex "hbreak lwip_setsockopt" \
 
-gdb --eval-command="target remote :$debug_port" -ex "set confirm off" -ex "set pagination off" \
-    -ex "hbreak _libkvmplat_start64" \
-    -ex "hbreak _libkvmplat_entry" \
-    -ex "c" \
-    -ex "disconnect" -ex "set arch i386:x86-64:intel" \
+gdb -ex "set confirm off" -ex "set pagination off" \
+    -ex "set arch i386:x86-64:intel" \
     -ex "target remote localhost:$debug_port" \
     -ex "$add_symbol_file" \
+    -ex "hbreak _ukplat_entry" \
+    -ex "continue" \
+    -ex "delete 1" \
     "$kvm_image"
