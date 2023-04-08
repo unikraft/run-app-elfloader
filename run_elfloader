@@ -114,9 +114,9 @@ fi
 if test "$use_networking" -eq 1; then
     setup_networking
     arguments+="-netdev tap,id=hnet0,vhost=off,script=$net_up_script,downscript=$net_down_script -device virtio-net-pci,netdev=hnet0,id=net0 "
-    arguments+="-append \"$net_args -- placeholder $*\" "
+    arguments+="-append \"$net_args -- $*\" "
 else
-    arguments+="-append \"-- placeholder $*\" "
+    arguments+="-append \"-- $*\" "
 fi
 
 # Start QEMU VM.
