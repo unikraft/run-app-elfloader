@@ -1,6 +1,6 @@
 # Run App ELF Loader
 
-Run Unikraft ELF loader app on Linux binaries, i.e. binary compatibility mode.
+Run Unikraft ELF loader app on Linux binaries, i.e. binary compatibility mode, using [`app-elfloader`](https://github.com/unikraft/app-elfloader).
 Supported Linux executables must be built using `-static-pie`.
 
 A list of pre-built Linux executables are located in the [`static-pie-apps` repository](https://github.com/unikraft/static-pie-apps).
@@ -10,7 +10,7 @@ This is used to load and run Linux static PIE ELF files.
 
 Use the `run_elfloader` script to run an ELF file:
 
-```
+```console
 $ ./run_elfloader ../static-pie-apps/small/socket/call_socket
 
 $ ./run_elfloader ../static-pie-apps/sqlite3/sqlite3
@@ -21,7 +21,7 @@ This file is sourced in the `run_elfloader` script.
 
 To list all script options run it without arguments or with the `-h` argument:
 
-```
+```console
 $ ./run_elfloader
 Start QEMU/KVM for ELF Loader app
 
@@ -43,7 +43,7 @@ These need to be copied to be used.
 
 For example, to run the `sqlite3` executable using the ELF loader, use:
 
-```
+```console
 $ ./run_elfloader -r ../static-pie-apps/sqlite3/rootfs/ ../static-pie-apps/sqlite3/sqlite3
 [...]
 qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000001H:ECX.svm [bit 2]
@@ -82,7 +82,7 @@ The `-n` option creates a bridge (`uk0`) and runs the specific actions to provid
 
 Below is the command to run the `redis-server` application with the ELF Loader.
 
-```
+```console
 $ ./run_elfloader -r ../static-pie-apps/redis/rootfs/ -n ../static-pie-apps/redis/redis-server redis.conf
 
 Creating bridge uk0 if it does not exist ...
@@ -152,46 +152,75 @@ This is enabled by the `-g` option of the `run_elfloader` script, together with 
 
 Note that GDB does not load the static PIE ELF's symbols automatically (see [app-elfloader#debugging-elf-apps](https://github.com/unikraft/app-elfloader/blob/lyon-hackathon/README.md#debugging-elf-apps)).
 To load those symbols, we need to know the start address which the ELF is loaded to.
-Run `run_elfloader` to find the start address:
+Run `run_elfloader` to find the start address and use the `app-elfloader_kvm-x86_64_full-debug` image:
 
-```
-$ ./run_elfloader -k app-elfloader_kvm-x86_64.dbg ../static-pie-apps/lang/c/helloworld
+```console
+$ ./run_elfloader -k app-elfloader_kvm-x86_64_full-debug ../static-pie-apps/lang/c/helloworld
 [...]
-[    5.241754] dbg:  [appelfloader] <elf_exec.c @   70> [...]/app-elfloader_kvm-x86_64.dbg: start: 0x3fe01000
+[    0.351701] Info: [appelfloader] <main.c @  122> ELF program loaded to 0x400101000-0x4001d0860 (850016 B), entry at 0x40010afa0
 [...]
 ```
 
-Here the start address is `0x3fe01000`.
+Here the start address is `0x400101000`.
 
-To start a debugging session, run the `run_elfloader` script with the corresponding options:
+To start a debugging session, run the `run_elfloader` script with the corresponding arguments:
 
-```
-$ ./run_elfloader -g -k app-elfloader_kvm-x86_64.dbg ../static-pie-apps/lang/c/helloworld
+```console
+$ ./run_elfloader -g -k app-elfloader_kvm-x86_64_full_debug ../static-pie-apps/lang/c/helloworld
 ```
 
 It will hang waiting for debugging inputs.
 
-On another console start the actual debugging interface by running the `debug.sh` script with the `.dbg` image, the ELF file and it's offset (both required for ELF symbols) as its arguments:
+On another console, start the actual debugging interface by running the `debug.sh` script with the following arguments:
 
-```
-ubuntu@vm-11:~/workdir/apps/run-app-elfloader$ ./debug.sh -e ../static-pie-apps/lang/c/helloworld -o 0x3fe01000 app-elfloader_kvm-x86_64.dbg
-+ gdb '--eval-command=target remote :1234' -ex 'set confirm off' -ex 'set pagination off' -ex 'hbreak _libkvmplat_start64' -ex 'hbreak _libkvmplat_entry' -ex c -ex disconnect -ex 'set arch i386:x86-64:intel' [...]
-[...]
-Reading symbols from app-elfloader_kvm-x86_64.dbg...
-Remote debugging using :1234
-0x000000000000fff0 in ?? ()
-Hardware assisted breakpoint 1 at 0x10503f: file /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/entry64.S, line 158.
-Hardware assisted breakpoint 2 at 0x106d00: file /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/setup.c, line 261.
+* the path to the ELF being loaded
+* the memory address where the ELF is loaded (found above)
+* the `.dbg` image of the ELF Loader
+
+```console
+$ ./debug.sh -e ../static-pie-apps/lang/c/helloworld -o 0x400101000 app-elfloader_kvm-x86_64_full-debug.dbg
++ gdb -ex 'set confirm off' -ex 'set pagination off' -ex 'set arch i386:x86-64:intel' -ex 'target remote localhost:1234' -ex 'add-symbol-file ../static-pie-apps/lang/c/helloworld -o 0
+x400101000' -ex 'hbreak _ukplat_entry' -ex continue -ex 'delete 1' app-elfloader_kvm-x86_64_full-debug.dbg
+
+add symbol table from file "../static-pie-apps/lang/c/helloworld" with all sections offset by 0x400101000
+Reading symbols from ../static-pie-apps/lang/c/helloworld...
+(No debugging symbols found in ../static-pie-apps/lang/c/helloworld)
+Hardware assisted breakpoint 1 at 0x10f780: file /workdir/unikraft/plat/kvm/x86/setup.c, line 296.
 Continuing.
 
-Breakpoint 1, _libkvmplat_start64 () at /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/entry64.S:158
-158             movq $bootstack, %rsp
-Ending remote debugging.
-The target architecture is assumed to be i386:x86-64:intel
-Remote debugging using localhost:1234
-_libkvmplat_start64 () at /home/unikraft/bin-compat/unikraft.sched-refactor/plat/kvm/x86/entry64.S:158
-158             movq $bootstack, %rsp
-add symbol table from file "../static-pie-apps/lang/c/helloworld" with all sections offset by 0x3fe01000
-Reading symbols from ../static-pie-apps/lang/c/helloworld...
+Breakpoint 1, _ukplat_entry (lcpu=lcpu@entry=0x200c40 <lcpus>, bi=bi@entry=0x1b3e68 <bi_bootinfo_sec>) at /workdir/unikraft/plat/kvm/x86/setup.c:296
+296     /workdir/unikraft/plat/kvm/x86/setup.c: No such file or directory.
 (gdb)
 ```
+
+The `./debug.sh` sets a hardware breakpoint at the unikernel entry point (`_ukplat_entry`).
+And then it deletes it to make room for other hardware breakpoints.
+
+Note that you need to use hardware breakpoints when first breaking into the newly loaded executable (afterwards you can use simple software breakpoints - using `break`).
+
+When waiting at `_ukplat_entry` you can list the `main` symbols by running `info function main`;
+the `main` symbol for the newly loaded executable typically starts with `0x400...`;
+you can make a connection with the address of the `__libc_start_main` symbol.
+Use `hbreak` to break.
+
+```console
+(gdb) info function main
+[...]
+Non-debugging symbols:
+[...]
+0x000000040010b089  main
+0x000000040010b430  __libc_start_main
+[...]
+(gdb) hbreak *0x000000040010b089
+Hardware assisted breakpoint 2 at 0x40010b089
+(gdb) c
+Continuing.
+
+Breakpoint 2, 0x000000040010b089 in main ()
+(gdb) bt
+#0  0x000000040010b089 in main ()
+#1  0x000000040010b8c0 in __libc_start_main ()
+#2  0x000000040010afce in _start ()
+```
+
+Typically, you would want to break on different system calls by using `break uk_syscall_r_...` (you can use Tab-Tab to list system call symbols).
