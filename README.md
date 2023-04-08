@@ -8,24 +8,24 @@ A list of pre-built Linux executables are located in the [`static-pie-apps` repo
 A pre-built ELF loader app image for KVM is provided in the `app-elfloader_kvm-x86_64` file.
 This is used to load and run Linux static PIE ELF files.
 
-Use the `run_elfloader` script to run an ELF file:
+Use the `run.sh` script to run an ELF file:
 
 ```console
-$ ./run_elfloader ../static-pie-apps/small/socket/call_socket
+$ ./run.sh ../static-pie-apps/small/socket/call_socket
 
-$ ./run_elfloader ../static-pie-apps/sqlite3/sqlite3
+$ ./run.sh ../static-pie-apps/sqlite3/sqlite3
 ```
 
 The default script options for the script are defined in the `defaults` file.
-This file is sourced in the `run_elfloader` script.
+This file is sourced in the `run.sh` script.
 
 To list all script options run it without arguments or with the `-h` argument:
 
 ```console
-$ ./run_elfloader
+$ ./run.sh
 Start QEMU/KVM for ELF Loader app
 
-./run_elfloader [-h] [-g] [-n] [-r path/to/9p/rootfs] [-k path/to/kvm/image] path/to/exec/to/load [args]
+./run.sh [-h] [-g] [-n] [-r path/to/9p/rootfs] [-k path/to/kvm/image] path/to/exec/to/load [args]
     -h - show this help message
     -g - start in debug mode
     -n - add networking support
@@ -44,7 +44,7 @@ These need to be copied to be used.
 For example, to run the `sqlite3` executable using the ELF loader, use:
 
 ```console
-$ ./run_elfloader -r ../static-pie-apps/sqlite3/rootfs/ ../static-pie-apps/sqlite3/sqlite3
+$ ./run.sh -r ../static-pie-apps/sqlite3/rootfs/ ../static-pie-apps/sqlite3/sqlite3
 [...]
 qemu-system-x86_64: warning: host doesn't support requested feature: CPUID.80000001H:ECX.svm [bit 2]
 SeaBIOS (version 1.13.0-1ubuntu1.1)
@@ -83,7 +83,7 @@ The `-n` option creates a bridge (`uk0`) and runs the specific actions to provid
 Below is the command to run the `redis-server` application with the ELF Loader.
 
 ```console
-$ ./run_elfloader -r ../static-pie-apps/redis/rootfs/ -n ../static-pie-apps/redis/redis-server redis.conf
+$ ./run.sh -r ../static-pie-apps/redis/rootfs/ -n ../static-pie-apps/redis/redis-server redis.conf
 
 Creating bridge uk0 if it does not exist ...
 Adding IP address 172.44.0.1 to bridge uk0 ...
@@ -148,14 +148,14 @@ oOo oOO| | | | |   (| | | (_) |  _) :_
 ## Running in debugging mode
 
 It is often the case you want to debug the unikernel running image using a debugger such as GDB.
-This is enabled by the `-g` option of the `run_elfloader` script, together with the use of the `.dbg` image and the `debug.sh` script.
+This is enabled by the `-g` option of the `run.sh` script, together with the use of the `.dbg` image and the `debug.sh` script.
 
 Note that GDB does not load the static PIE ELF's symbols automatically (see [app-elfloader#debugging-elf-apps](https://github.com/unikraft/app-elfloader/blob/lyon-hackathon/README.md#debugging-elf-apps)).
 To load those symbols, we need to know the start address which the ELF is loaded to.
-Run `run_elfloader` to find the start address and use the `app-elfloader_kvm-x86_64_full-debug` image:
+Run `run.sh` to find the start address and use the `app-elfloader_kvm-x86_64_full-debug` image:
 
 ```console
-$ ./run_elfloader -k app-elfloader_kvm-x86_64_full-debug ../static-pie-apps/lang/c/helloworld
+$ ./run.sh -k app-elfloader_kvm-x86_64_full-debug ../static-pie-apps/lang/c/helloworld
 [...]
 [    0.351701] Info: [appelfloader] <main.c @  122> ELF program loaded to 0x400101000-0x4001d0860 (850016 B), entry at 0x40010afa0
 [...]
@@ -163,10 +163,10 @@ $ ./run_elfloader -k app-elfloader_kvm-x86_64_full-debug ../static-pie-apps/lang
 
 Here the start address is `0x400101000`.
 
-To start a debugging session, run the `run_elfloader` script with the corresponding arguments:
+To start a debugging session, run the `run.sh` script with the corresponding arguments:
 
 ```console
-$ ./run_elfloader -g -k app-elfloader_kvm-x86_64_full_debug ../static-pie-apps/lang/c/helloworld
+$ ./run.sh -g -k app-elfloader_kvm-x86_64_full_debug ../static-pie-apps/lang/c/helloworld
 ```
 
 It will hang waiting for debugging inputs.
