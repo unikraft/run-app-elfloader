@@ -78,15 +78,15 @@ sqlite>
 ## Using networking
 
 When running a server / network application, networking is required.
-The `-n` option creates a bridge (`uk0`) and runs the specific actions to provide networking support.
+The `-n` option creates a bridge (`virbr0`) and runs the specific actions to provide networking support.
 
 Below is the command to run the `redis-server` application with the ELF Loader.
 
 ```console
 $ ./run.sh -r ../static-pie-apps/redis/rootfs/ -n ../static-pie-apps/redis/redis-server redis.conf
 
-Creating bridge uk0 if it does not exist ...
-Adding IP address 172.44.0.1 to bridge uk0 ...
+Creating bridge virbr0 if it does not exist ...
+Adding IP address 172.44.0.1 to bridge virbr0 ...
 SeaBIOS (version 1.13.0-1ubuntu1.1)
 
 

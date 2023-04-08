@@ -2,7 +2,7 @@
 
 rootfs_9p="$PWD/rootfs/"
 kvm_image="$PWD/app-elfloader_kvm-x86_64"
-bridge_iface="uk0"
+bridge_iface="virbr0"
 bridge_ip="172.44.0.1"
 vm_ip="172.44.0.2"
 netmask="255.255.255.0"
