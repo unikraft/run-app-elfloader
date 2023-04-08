@@ -120,4 +120,7 @@ else
 fi
 
 # Start QEMU VM.
+echo "Running command: "
+echo "sudo qemu-system-x86_64 "$arguments""
+echo ""
 eval sudo qemu-system-x86_64 "$arguments"
