@@ -55,6 +55,39 @@ debug_port="1234"
 # Show script commands when run.
 set -x
 
+# Start GDB and use a hardware breakpoint at `_ukplat_entry`.
+# After waiting at `_ukplat_entry`, delete hardware breakpoint to
+# make room for others.
+# Note that you need to use hardware breakpoints when first breaking into
+# the newly loaded executable (afterwards you can use simple software
+# breakpoints - using `break`).
+#
+# When waiting at `_ukplat_entry` you can list the `main` symbols by
+# running `info function main`; the `main` symbol for the newly loaded
+# executable typically starts with `0x400...`; you can make a connection
+# with the `__libc_start_main` symbol. Use `hbreak` to break.
+#
+# Sample run:
+# ```
+# (gdb) info function main
+# [...]
+# Non-debugging symbols:
+# [...]
+# 0x000000040010b089  main
+# 0x000000040010b430  __libc_start_main
+# [...]
+# (gdb) hbreak *0x000000040010b089
+# Hardware assisted breakpoint 2 at 0x40010b089
+# (gdb) c
+# Continuing.
+#
+# Breakpoint 2, 0x000000040010b089 in main ()
+# [...]
+# ```
+#
+# Typically, you would want to break on different system calls by using
+# `b uk_syscall_r_...` (you can use Tab-Tab to list system call symbols).
+#
 # If you want to add further breakpoints from the start, update the gdb
 # command below with entries such as:
 #   -ex "hbreak lwip_socket" \
