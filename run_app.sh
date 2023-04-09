@@ -5,9 +5,19 @@ run_helloworld_static()
     ./run.sh -r rootfs/ ../static-pie-apps/lang/c/helloworld
 }
 
+run_server_static()
+{
+    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/c/server
+}
+
 run_helloworld_go_static()
 {
     ./run.sh -r rootfs/ ../static-pie-apps/lang/go/helloworld
+}
+
+run_server_go_static()
+{
+    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/go/server
 }
 
 run_helloworld_cpp_static()
@@ -55,14 +65,24 @@ run_helloworld()
     ./run.sh -r ../dynamic-apps/lang/c/ /lib64/ld-linux-x86-64.so.2 /helloworld
 }
 
-run_helloworld_cpp()
+run_server()
 {
-    ./run.sh -r ../dynamic-apps/lang/c++/ /lib64/ld-linux-x86-64.so.2 /helloworld
+    ./run.sh -n -r ../dynamic-apps/lang/c/ /lib64/ld-linux-x86-64.so.2 /server
 }
 
 run_helloworld_go()
 {
     ./run.sh -r ../dynamic-apps/lang/go/ /lib64/ld-linux-x86-64.so.2 /helloworld
+}
+
+run_server_go()
+{
+    ./run.sh -n -r ../dynamic-apps/lang/go/ /lib64/ld-linux-x86-64.so.2 /server
+}
+
+run_helloworld_cpp()
+{
+    ./run.sh -r ../dynamic-apps/lang/c++/ /lib64/ld-linux-x86-64.so.2 /helloworld
 }
 
 run_helloworld_rust()
@@ -87,16 +107,16 @@ run_sqlite3()
 
 run_nginx()
 {
-    ./run.sh -r ../dynamic-apps/nginx/ /lib64/ld-linux-x86-64.so.2 /usr/sbin/nginx
+    ./run.sh -n -r ../dynamic-apps/nginx/ /lib64/ld-linux-x86-64.so.2 /usr/sbin/nginx
 }
 
 run_redis()
 {
-    ./run.sh -r ../dynamic-apps/redis/ /lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server
+    ./run.sh -n -r ../dynamic-apps/redis/ /lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server
 }
 
-apps=("helloworld_static" "helloworld_go_static" "helloworld_cpp_static" "helloworld_rust_static_musl" "helloworld_rust_static_gnu" "nginx_static" "redis_static" "sqlite3" "bc_static" "gzip_static")
-apps+=("helloworld" "helloworld_go" "helloworld_cpp" "helloworld_rust" "nginx" "redis" "sqlite3" "bc" "gzip")
+apps=("helloworld_static" "server_static" "helloworld_go_static" "server_go_static" "helloworld_cpp_static" "helloworld_rust_static_musl" "helloworld_rust_static_gnu" "nginx_static" "redis_static" "sqlite3" "bc_static" "gzip_static")
+apps+=("helloworld" "server" "helloworld_go" "server_go" "helloworld_cpp" "helloworld_rust" "nginx" "redis" "sqlite3" "bc" "gzip")
 if test $# -ne 1; then
     echo "Usage: $0 <app>" 1>&2
     echo 1>&2
