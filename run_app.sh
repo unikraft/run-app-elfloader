@@ -112,7 +112,7 @@ run_nginx()
 
 run_redis()
 {
-    ./run.sh -n -r ../dynamic-apps/redis/ /lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server
+    ./run.sh -n -r ../dynamic-apps/redis/ /lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
 }
 
 apps=("helloworld_static" "server_static" "helloworld_go_static" "server_go_static" "helloworld_cpp_static" "helloworld_rust_static_musl" "helloworld_rust_static_gnu" "nginx_static" "redis_static" "sqlite3" "bc_static" "gzip_static")
