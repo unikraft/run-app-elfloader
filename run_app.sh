@@ -57,7 +57,9 @@ run_bc_static()
 
 run_gzip_static()
 {
-    ./run.sh -r ../static-pie-apps/gzip/rootfs ../static-pie-apps/gzip/gzip /README.md
+    echo "test" > ../static-pie-apps/gzip/rootfs/test.txt
+    sudo rm -f ../static-pie-apps/gzip/rootfs/test.txt.gz
+    ./run.sh -r ../static-pie-apps/gzip/rootfs/ ../static-pie-apps/gzip/gzip test.txt
 }
 
 run_helloworld()
@@ -97,6 +99,8 @@ run_bc()
 
 run_gzip()
 {
+    echo "test" > ../dynamic-apps/gzip/test.txt
+    sudo rm -f ../dynamic-apps/gzip/test.txt.gz
     ./run.sh -r ../dynamic-apps/gzip/ /lib64/ld-linux-x86-64.so.2 /bin/gzip test.txt
 }
 
