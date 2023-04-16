@@ -103,28 +103,28 @@ arguments="${arguments}-kernel $kvm_image "
 arguments="${arguments}-initrd $exec_to_load "
 
 if test "$use_kvm" -eq 1; then
-  file="/dev/kvm"
-  if ! [ -c "$file" ]; then
-    echo "$file does not exist, cannot run with KVM" 1>&2
-    exit 1
-  fi
-
-  # Check if the effective user has RW permission to /dev/kvm,
-  # if they haven't, temporarily add the user to the group that owns
-  # /dev/kvm, by default the KVM group. If that also fails, run QEMU
-  # as root, but with the -runas parameter to drop privileges.
-  if ! [ -r "$file" ] || ! [ -w "$file" ]; then
-    group_owner=$(stat -c "%G" $file)
-    if [ "$(stat -c "%A" $file | cut -c 5-6)" = "rw" ] && ! [ "$group_owner" = "$(id -un 0)" ];
-    then
-      sudo_prefix="sudo -g $group_owner -- "
-    else
-      sudo_prefix="sudo "
-      arguments="${arguments}-runas $USER "
+    file="/dev/kvm"
+    if ! [ -c "$file" ]; then
+      echo "$file does not exist, cannot run with KVM" 1>&2
+      exit 1
     fi
-  fi
 
-  arguments="${arguments}-enable-kvm -cpu host "
+    # Check if the effective user has RW permission to /dev/kvm,
+    # if they haven't, temporarily add the user to the group that owns
+    # /dev/kvm, by default the KVM group. If that also fails, run QEMU
+    # as root, but with the -runas parameter to drop privileges.
+    if ! [ -r "$file" ] || ! [ -w "$file" ]; then
+        group_owner=$(stat -c "%G" $file)
+        if [ "$(stat -c "%A" $file | cut -c 5-6)" = "rw" ] && ! [ "$group_owner" = "$(id -un 0)" ];
+        then
+            sudo_prefix="sudo -g $group_owner -- "
+        else
+            sudo_prefix="sudo "
+            arguments="${arguments}-runas $USER "
+        fi
+    fi
+
+    arguments="${arguments}-enable-kvm -cpu host "
 fi
 
 if test "$start_in_debug_mode" -eq 1; then
