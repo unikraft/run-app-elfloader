@@ -105,7 +105,7 @@ arguments="${arguments}-initrd $exec_to_load "
 if test "$use_kvm" -eq 1; then
   file="/dev/kvm"
   if ! [ -c "$file" ]; then
-    echo "$file does not exist, cannot run with KVM" 2>&1
+    echo "$file does not exist, cannot run with KVM" 1>&2
     exit 1
   fi
 
