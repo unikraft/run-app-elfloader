@@ -64,59 +64,59 @@ run_gzip_static()
 
 run_helloworld()
 {
-    ./run.sh -r ../dynamic-apps/lang/c/ /lib64/ld-linux-x86-64.so.2 /helloworld
+    ./run.sh -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /helloworld
 }
 
 run_server()
 {
-    ./run.sh -n -r ../dynamic-apps/lang/c/ /lib64/ld-linux-x86-64.so.2 /server
+    ./run.sh -n -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /server
 }
 
 run_helloworld_go()
 {
-    ./run.sh -r ../dynamic-apps/lang/go/ /lib64/ld-linux-x86-64.so.2 /helloworld
+    ./run.sh -r ../dynamic-apps/lang/go/ ../dynamic-apps/lang/go/lib64/ld-linux-x86-64.so.2 /helloworld
 }
 
 run_server_go()
 {
-    ./run.sh -n -r ../dynamic-apps/lang/go/ /lib64/ld-linux-x86-64.so.2 /server
+    ./run.sh -n -r ../dynamic-apps/lang/go/ ../dynamic-apps/lang/go/lib64/ld-linux-x86-64.so.2 /server
 }
 
 run_helloworld_cpp()
 {
-    ./run.sh -r ../dynamic-apps/lang/c++/ /lib64/ld-linux-x86-64.so.2 /helloworld
+    ./run.sh -r ../dynamic-apps/lang/c++/ ../dynamic-apps/lang/c++/lib64/ld-linux-x86-64.so.2 /helloworld
 }
 
 run_helloworld_rust()
 {
-    ./run.sh -r ../dynamic-apps/lang/rust/ /lib64/ld-linux-x86-64.so.2 /helloworld
+    ./run.sh -r ../dynamic-apps/lang/rust/ ../dynamic-apps/lang/rust/lib64/ld-linux-x86-64.so.2 /helloworld
 }
 
 run_bc()
 {
-    ./run.sh -r ../dynamic-apps/bc/ /lib64/ld-linux-x86-64.so.2 /usr/bin/bc
+    ./run.sh -r ../dynamic-apps/bc/ ../dynamic-apps/bc/lib64/ld-linux-x86-64.so.2 /usr/bin/bc
 }
 
 run_gzip()
 {
     echo "test" > ../dynamic-apps/gzip/test.txt
     sudo rm -f ../dynamic-apps/gzip/test.txt.gz
-    ./run.sh -r ../dynamic-apps/gzip/ /lib64/ld-linux-x86-64.so.2 /bin/gzip test.txt
+    ./run.sh -r ../dynamic-apps/gzip/ ../dynamic-apps/gzip/lib64/ld-linux-x86-64.so.2 /bin/gzip test.txt
 }
 
 run_sqlite3()
 {
-    ./run.sh -r ../dynamic-apps/sqlite3/ /lib64/ld-linux-x86-64.so.2 /usr/bin/sqlite3
+    ./run.sh -r ../dynamic-apps/sqlite3/ ../dynamic-apps/sqlite3/lib64/ld-linux-x86-64.so.2 /usr/bin/sqlite3
 }
 
 run_nginx()
 {
-    ./run.sh -n -r ../dynamic-apps/nginx/ /lib64/ld-linux-x86-64.so.2 /usr/sbin/nginx
+    ./run.sh -n -r ../dynamic-apps/nginx/ ../dynamic-apps/nginx/lib64/ld-linux-x86-64.so.2 /usr/sbin/nginx
 }
 
 run_redis()
 {
-    ./run.sh -n -r ../dynamic-apps/redis/ /lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
+    ./run.sh -n -r ../dynamic-apps/redis/ ../dynamic-apps/redis/lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
 }
 
 available_applications()
