@@ -121,27 +121,27 @@ run_redis()
 
 available_applications()
 {
-  grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
+    grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
 }
 
 print_available_apps()
 {
-  printf "Possible apps:\n%s" "$(available_applications | tr '\n' ' ' | fold -s)"
+    printf "Possible apps:\n%s" "$(available_applications | tr '\n' ' ' | fold -s)"
 }
 
 if test $# -ne 1; then
-  echo "Usage: $0 <app>"
-  print_available_apps
-  echo 1>&2
-  exit 1
+    echo "Usage: $0 <app>"
+    print_available_apps
+    echo 1>&2
+    exit 1
 fi
 
 app="$1"
 
 if available_applications | grep -x "$app" >/dev/null; then
-  run_"$app"
+    run_"$app"
 else
-  echo "Unknown app '$app', don't know how to run it" 1>&2
-  print_available_apps
-  exit 1
+    echo "Unknown app '$app', don't know how to run it" 1>&2
+    print_available_apps
+    exit 1
 fi
