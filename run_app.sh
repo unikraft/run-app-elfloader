@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 run_helloworld_static()
 {
@@ -119,27 +119,29 @@ run_redis()
     ./run.sh -n -r ../dynamic-apps/redis/ /lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
 }
 
-apps=("helloworld_static" "server_static" "helloworld_go_static" "server_go_static" "helloworld_cpp_static" "helloworld_rust_static_musl" "helloworld_rust_static_gnu" "nginx_static" "redis_static" "sqlite3" "bc_static" "gzip_static")
-apps+=("helloworld" "server" "helloworld_go" "server_go" "helloworld_cpp" "helloworld_rust" "nginx" "redis" "sqlite3" "bc" "gzip")
+available_applications()
+{
+  grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
+}
+
+print_available_apps()
+{
+  printf "Possible apps:\n%s" "$(available_applications | tr '\n' ' ' | fold -s)"
+}
+
 if test $# -ne 1; then
-    echo "Usage: $0 <app>" 1>&2
-    echo 1>&2
-    echo "Possible apps: ${apps[@]}" 1>&2
-    exit 1
+  echo "Usage: $0 <app>"
+  print_available_apps
+  echo 1>&2
+  exit 1
 fi
 
 app="$1"
 
-if [[ ! " ${apps[*]} " =~ " $app " ]]; then
-    echo "Unknown app $app" 1>&2
-    echo 1>&2
-    echo "Possible apps: ${apps[@]}" 1>&2
-    exit 1
+if available_applications | grep -x "$app" >/dev/null; then
+  run_"$app"
+else
+  echo "Unknown app '$app', don't know how to run it" 1>&2
+  print_available_apps
+  exit 1
 fi
-
-if test ! "$(type -t run_"$app")" = "function"; then
-    echo "Don't know how to run $app" 1>&2
-    exit 1
-fi
-
-run_"$app"

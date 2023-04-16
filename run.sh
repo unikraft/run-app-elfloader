@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-source ./defaults
+. ./defaults
 
 usage()
 {
@@ -40,14 +40,14 @@ setup_networking()
 
     # Configure network setup scripts.
     cat > "$net_up_script" <<END
-#!/bin/bash
+#!/bin/sh
 
 sudo ip link set dev "\$1" up
 sudo ip link set dev "\$1" master "$bridge_iface"
 END
 
     cat > "$net_down_script" <<END
-#!/bin/bash
+#!/bin/sh
 
 sudo ip link set dev "\$1" nomaster
 sudo ip link set dev "\$1" down
@@ -87,7 +87,7 @@ while getopts "dhngk:r:" OPT; do
     esac
 done
 
-shift $((${OPTIND}-1))
+shift $((OPTIND-1))
 
 if test "$#" -lt 1; then
     usage
@@ -97,30 +97,30 @@ exec_to_load="$1"
 shift
 
 arguments="-m 2G -nographic -nodefaults "
-arguments+="-display none -serial stdio -device isa-debug-exit "
-arguments+="-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
-arguments+="-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=fs0 "
-arguments+="-kernel $kvm_image "
-arguments+="-initrd $exec_to_load "
+arguments="${arguments}-display none -serial stdio -device isa-debug-exit "
+arguments="${arguments}-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
+arguments="${arguments}-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=fs0 "
+arguments="${arguments}-kernel $kvm_image "
+arguments="${arguments}-initrd $exec_to_load "
 
 if test "$use_kvm" -eq 1; then
-    arguments+="-enable-kvm -cpu host "
+    arguments="${arguments}-enable-kvm -cpu host "
 fi
 
 if test "$start_in_debug_mode" -eq 1; then
-    arguments+="-s -S "
+    arguments="${arguments}-s -S "
 fi
 
 if test "$use_networking" -eq 1; then
     setup_networking
-    arguments+="-netdev tap,id=hnet0,vhost=off,script=$net_up_script,downscript=$net_down_script -device virtio-net-pci,netdev=hnet0,id=net0 "
-    arguments+="-append \"$net_args -- $*\" "
+    arguments="${arguments}-netdev tap,id=hnet0,vhost=off,script=$net_up_script,downscript=$net_down_script -device virtio-net-pci,netdev=hnet0,id=net0 "
+    arguments="${arguments}-append \"$net_args -- $*\" "
 else
-    arguments+="-append \"-- $*\" "
+    arguments="${arguments}-append \"-- $*\" "
 fi
 
 # Start QEMU VM.
 echo "Running command: "
-echo "sudo qemu-system-x86_64 "$arguments""
+echo sudo qemu-system-x86_64 "$arguments"
 echo ""
 eval sudo qemu-system-x86_64 "$arguments"

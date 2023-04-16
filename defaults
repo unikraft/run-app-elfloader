@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 rootfs_9p="$PWD/rootfs/"
 kvm_image="$PWD/app-elfloader_kvm-x86_64"
