@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 usage()
 {
@@ -28,7 +28,7 @@ while getopts "he:o:" OPT; do
     esac
 done
 
-shift $((${OPTIND}-1))
+shift $((OPTIND-1))
 
 if test "$#" -lt 1; then
     usage
