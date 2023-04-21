@@ -10,6 +10,11 @@ run_server_static()
     ./run.sh -n -r rootfs/ ../static-pie-apps/lang/c/server
 }
 
+run_client_static()
+{
+    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/c/client 172.44.0.2 3333
+}
+
 run_helloworld_go_static()
 {
     ./run.sh -r rootfs/ ../static-pie-apps/lang/go/helloworld
@@ -18,6 +23,11 @@ run_helloworld_go_static()
 run_server_go_static()
 {
     ./run.sh -n -r rootfs/ ../static-pie-apps/lang/go/server
+}
+
+run_client_go_static()
+{
+    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/go/client 172.44.0.2 3333
 }
 
 run_helloworld_cpp_static()
@@ -72,6 +82,11 @@ run_server()
     ./run.sh -n -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /server
 }
 
+run_client()
+{
+    ./run.sh -n -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /client 172.44.0.1 3333
+}
+
 run_helloworld_go()
 {
     ./run.sh -r ../dynamic-apps/lang/go/ ../dynamic-apps/lang/go/lib64/ld-linux-x86-64.so.2 /helloworld
@@ -80,6 +95,11 @@ run_helloworld_go()
 run_server_go()
 {
     ./run.sh -n -r ../dynamic-apps/lang/go/ ../dynamic-apps/lang/go/lib64/ld-linux-x86-64.so.2 /server
+}
+
+run_client_go()
+{
+    ./run.sh -n -r ../dynamic-apps/lang/go/ ../dynamic-apps/lang/go/lib64/ld-linux-x86-64.so.2 /client 172.44.0.1 3333
 }
 
 run_helloworld_cpp()
