@@ -139,6 +139,26 @@ run_redis()
     ./run.sh -n -r ../dynamic-apps/redis/ ../dynamic-apps/redis/lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
 }
 
+run_python()
+{
+    ./run.sh -r ../dynamic-apps/lang/python/ ../dynamic-apps/lang/python/lib64/ld-linux-x86-64.so.2 /bin/python3.11
+}
+
+run_openssl()
+{
+    ./run.sh -r ../dynamic-apps/openssl/ ../dynamic-apps/openssl/lib64/ld-linux-x86-64.so.2 /bin/openssl enc -aes-128-cbc -in /input.txt -out /input.enc -K 01020304050607080900010203040506 -iv 01020304050607080900010203040506
+}
+
+run_echo()
+{
+    ./run.sh -r ../dynamic-apps/echo/ ../dynamic-apps/echo/lib64/ld-linux-x86-64.so.2 /bin/echo Hello
+}
+
+run_ls()
+{
+    ./run.sh -r ../dynamic-apps/ls/ ../dynamic-apps/ls/lib64/ld-linux-x86-64.so.2 /bin/ls
+}
+
 available_applications()
 {
     grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
