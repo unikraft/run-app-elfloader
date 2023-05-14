@@ -171,6 +171,13 @@ run_haproxy()
     ./run.sh -n -r ../dynamic-apps/haproxy/ "$extra_args" /bin/haproxy -f /etc/haproxy/haproxy.conf
 }
 
+run_bzip2()
+{
+    echo "test" > ../dynamic-apps/bzip2/test.txt
+    sudo rm -f ../dynamic-apps/bzip2/test.txt.bz2
+    ./run.sh -r ../dynamic-apps/bzip2/ "$extra_args" /bin/bzip2 test.txt
+}
+
 available_applications()
 {
     grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
