@@ -166,6 +166,11 @@ run_ls()
     ./run.sh -r ../dynamic-apps/ls/ "$extra_args" /bin/ls
 }
 
+run_haproxy()
+{
+    ./run.sh -n -r ../dynamic-apps/haproxy/ "$extra_args" /bin/haproxy -f /etc/haproxy/haproxy.conf
+}
+
 available_applications()
 {
     grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
