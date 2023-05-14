@@ -133,7 +133,7 @@ run_sqlite3()
 
 run_nginx()
 {
-    ./run.sh -n -r ../dynamic-apps/nginx/ "$extra_args" /usr/local/nginx/sbin/nginx
+    ./run.sh -n -r ../dynamic-apps/nginx/ "$extra_args" /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
 }
 
 run_redis()
