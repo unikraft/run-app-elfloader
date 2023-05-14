@@ -141,6 +141,11 @@ run_redis()
     ./run.sh -n -r ../dynamic-apps/redis/ "$extra_args" /usr/bin/redis-server /etc/redis/redis.conf
 }
 
+run_redis7()
+{
+    ./run.sh -n -r ../dynamic-apps/redis7/ "$extra_args" /usr/bin/redis-server /etc/redis/redis.conf
+}
+
 run_python()
 {
     ./run.sh -r ../dynamic-apps/lang/python/ "$extra_args" /bin/python3.11
