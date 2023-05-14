@@ -6,10 +6,11 @@ usage()
 {
     echo "Start QEMU/KVM for ELF Loader app" 1>&2
     echo ""
-    echo "$0 [-h] [-g] [-n] [-r path/to/9p/rootfs] [-k path/to/kvm/image] path/to/exec/to/load [args]" 1>&2
+    echo "$0 [-h] [-g] [-n] [-i] [-r path/to/9p/rootfs] [-k path/to/unikernel/image] path/to/exec/to/load [args]" 1>&2
     echo "    -h - show this help message" 1>&2
     echo "    -g - start in debug mode" 1>&2
     echo "    -n - add networking support" 1>&2
+    echo "    -i - use initial ramdisk for loading executable" 1>&2
     echo "    -d - disable KVM" 1>&2
     echo "    -r - set path to 9pfs root filesystem" 1>&2
     echo "    -k - set path unikraft image" 1>&2
@@ -58,9 +59,10 @@ END
 
 use_kvm=1
 use_networking=0
+use_initrd=0
 start_in_debug_mode=0
 
-while getopts "dhngk:r:" OPT; do
+while getopts "dhngik:r:" OPT; do
     case ${OPT} in
         n)
             use_networking=1
@@ -80,6 +82,9 @@ while getopts "dhngk:r:" OPT; do
         g)
             start_in_debug_mode=1
             ;;
+        i)
+            use_initrd=1
+            ;;
         *)
             usage
             ;;
@@ -93,14 +98,18 @@ if test "$#" -lt 1; then
 fi
 
 exec_to_load="$1"
-shift
 
 arguments="-m 2G -nographic -nodefaults "
 arguments="${arguments}-display none -serial stdio -device isa-debug-exit "
 arguments="${arguments}-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
 arguments="${arguments}-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=fs0 "
 arguments="${arguments}-kernel $kvm_image "
-arguments="${arguments}-initrd $exec_to_load "
+
+# If using initial ramdisk, load the executable into ramdisk.
+if test "$use_initrd" -eq 1; then
+    arguments="${arguments}-initrd $exec_to_load "
+    shift
+fi
 
 if test "$use_kvm" -eq 1; then
     file="/dev/kvm"
@@ -136,7 +145,7 @@ if test "$use_networking" -eq 1; then
     arguments="${arguments}-netdev tap,id=hnet0,vhost=off,script=$net_up_script,downscript=$net_down_script -device virtio-net-pci,netdev=hnet0,id=net0 "
     arguments="${arguments}-append \"$net_args -- $*\" "
 else
-    arguments="${arguments}-append \"-- $*\" "
+    arguments="${arguments}-append \"$*\" "
 fi
 
 # Start QEMU VM.
