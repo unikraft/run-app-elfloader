@@ -4,74 +4,74 @@ extra_args=""
 
 run_helloworld_static()
 {
-    ./run.sh -r rootfs/ ../static-pie-apps/lang/c/helloworld
+    ./run.sh -r ../static-pie-apps/lang/c /helloworld
 }
 
 run_server_static()
 {
-    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/c/server
+    ./run.sh -n -r ../static-pie-apps/lang/c /server
 }
 
 run_client_static()
 {
-    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/c/client 172.44.0.2 3333
+    ./run.sh -n -r ../static-pie-apps/lang/c /client 172.44.0.2 3333
 }
 
 run_helloworld_go_static()
 {
-    ./run.sh -r rootfs/ ../static-pie-apps/lang/go/helloworld
+    ./run.sh -r ../static-pie-apps/lang/go /helloworld
 }
 
 run_server_go_static()
 {
-    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/go/server
+    ./run.sh -n -r ../static-pie-apps/lang/go /server
 }
 
 run_client_go_static()
 {
-    ./run.sh -n -r rootfs/ ../static-pie-apps/lang/go/client 172.44.0.2 3333
+    ./run.sh -n -r ../static-pie-apps/lang/go /client 172.44.0.2 3333
 }
 
 run_helloworld_cpp_static()
 {
-    ./run.sh -r rootfs/ ../static-pie-apps/lang/c++/helloworld
+    ./run.sh -r ../static-pie-apps/lang/c++ /helloworld
 }
 
 run_helloworld_rust_static_musl()
 {
-    ./run.sh -r rootfs/ ../static-pie-apps/lang/rust/helloworld-musl
+    ./run.sh -r ../static-pie-apps/lang/rust /helloworld-musl
 }
 
 run_helloworld_rust_static_gnu()
 {
-    ./run.sh -r rootfs/ ../static-pie-apps/lang/rust/helloworld-gnu
+    ./run.sh -r ../static-pie-apps/lang/rust /helloworld-gnu
 }
 
 run_nginx_static()
 {
-    ./run.sh -n -r ../static-pie-apps/nginx/rootfs ../static-pie-apps/nginx/nginx
+    ./run.sh -n -r ../static-pie-apps/nginx/rootfs /nginx
 }
 
 run_redis_static()
 {
-    ./run.sh -n -r ../static-pie-apps/redis/rootfs ../static-pie-apps/redis/redis-server /redis.conf
+    ./run.sh -n -r ../static-pie-apps/redis/rootfs /redis-server /redis.conf
 }
 
 run_sqlite3_static()
 {
-    ./run.sh -r ../static-pie-apps/sqlite3/rootfs ../static-pie-apps/sqlite3/sqlite3
+    ./run.sh -r ../static-pie-apps/sqlite3/rootfs /sqlite3
 }
 
 run_bc_static()
 {
-    ./run.sh -r rootfs/ ../static-pie-apps/bc/bc
+    ./run.sh -r ../static-pie-apps/bc /bc
 }
 
 run_gzip_static()
 {
     echo "test" > ../static-pie-apps/gzip/rootfs/test.txt
     sudo rm -f ../static-pie-apps/gzip/rootfs/test.txt.gz
-    ./run.sh -r ../static-pie-apps/gzip/rootfs/ ../static-pie-apps/gzip/gzip test.txt
+    ./run.sh -r ../static-pie-apps/gzip/rootfs/ /gzip /test.txt
 }
 
 run_helloworld()
@@ -123,7 +123,7 @@ run_gzip()
 {
     echo "test" > ../dynamic-apps/gzip/test.txt
     sudo rm -f ../dynamic-apps/gzip/test.txt.gz
-    ./run.sh -r ../dynamic-apps/gzip/ "$extra_args" /bin/gzip test.txt
+    ./run.sh -r ../dynamic-apps/gzip/ "$extra_args" /bin/gzip /test.txt
 }
 
 run_sqlite3()
@@ -175,7 +175,7 @@ run_bzip2()
 {
     echo "test" > ../dynamic-apps/bzip2/test.txt
     sudo rm -f ../dynamic-apps/bzip2/test.txt.bz2
-    ./run.sh -r ../dynamic-apps/bzip2/ "$extra_args" /bin/bzip2 test.txt
+    ./run.sh -r ../dynamic-apps/bzip2/ "$extra_args" /bin/bzip2 /test.txt
 }
 
 available_applications()
@@ -191,6 +191,8 @@ print_available_apps()
 if test $# -ne 1 -a $# -ne 2; then
     echo "Usage: $0 [-l] <app>"
     print_available_apps
+    echo ""
+    echo ""
     echo "    -l - use dynamic loader explicitly" 1>&2
     echo 1>&2
     exit 1
