@@ -134,6 +134,8 @@ if test "$use_kvm" -eq 1; then
     fi
 
     arguments="${arguments}-enable-kvm -cpu host "
+else
+    arguments="${arguments}-cpu ${cpu_model} "
 fi
 
 if test "$start_in_debug_mode" -eq 1; then
