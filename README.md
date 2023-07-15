@@ -12,11 +12,11 @@ A list of pre-built Linux executables are located in:
 
 Pre-built `app-elfloader` Unikraft images for KVM,  are provided:
 
-* `app-elfloader_kvm-x86_64`: This is the default image.
+* `app-elfloader_qemu-x86_64`: This is the default image.
   It prints out `strace`-like messages for each system call.
-* `app-elfloader_kvm-x86_64_plain`: This is the least verbose image, without `strace`-like messages.
-* `app-elfloader_kvm-x86_64_full-debug`: This image prints out extensive debugging information, including the `strace`-like messages.
-* `app-elfloader_kvm-x86_64_full-debug.dbg`: This is the above image with debugging symbols, used for debugging.
+* `app-elfloader_qemu-x86_64_plain`: This is the least verbose image, without `strace`-like messages.
+* `app-elfloader_qemu-x86_64_full-debug`: This image prints out extensive debugging information, including the `strace`-like messages.
+* `app-elfloader_qemu-x86_64_full-debug.dbg`: This is the above image with debugging symbols, used for debugging.
   See more on debugging [below](#running-in-debugging-mode).
 
 Other files are:
@@ -72,7 +72,7 @@ The files to be used by each particular ELF file are located in:
 For example, to run the `sqlite3` static PIE ELF, use:
 
 ```console
-$ ./run.sh -k app-elfloader_kvm-x86_64_plain -r ../static-pie-apps/sqlite3/rootfs/ ../static-pie-apps/sqlite3/sqlite3
+$ ./run.sh -k app-elfloader_qemu-x86_64_plain -r ../static-pie-apps/sqlite3/rootfs/ ../static-pie-apps/sqlite3/sqlite3
 [...]
 Powered by
 o.   .o       _ _               __ _
@@ -101,7 +101,7 @@ In the command above, we used the `-k` option to use the `plain` ELF loader imag
 To run the dynamic `sqlite3` PIE ELF, use:
 
 ```console
-$ ./run.sh -k app-elfloader_kvm-x86_64_plain -r ../dynamic-apps/sqlite3/ ../dynamic-apps/sqlite3/lib64/ld-linux-x86-64.so.2 /usr/bin/sqlite3
+$ ./run.sh -k app-elfloader_qemu-x86_64_plain -r ../dynamic-apps/sqlite3/ ../dynamic-apps/sqlite3/lib64/ld-linux-x86-64.so.2 /usr/bin/sqlite3
 [...]
 Powered by
 o.   .o       _ _               __ _
@@ -136,7 +136,7 @@ The `-n` option creates a bridge (`virbr0`) and runs the specific actions to pro
 You can run a simple dynamic ELF server written in C using:
 
 ```console
-$ ./run.sh -k app-elfloader_kvm-x86_64_plain -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /server
+$ ./run.sh -k app-elfloader_qemu-x86_64_plain -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /server
 [...]
 Powered by
 o.   .o       _ _               __ _
@@ -151,7 +151,7 @@ Listening on port 3333...
 For a more complex scenario, below is the command to run the dynamic `redis-server` ELF:
 
 ```console
-$ ./run.sh -k app-elfloader_kvm-x86_64_plain -r ../dynamic-apps/redis/ ../dynamic-apps/redis/lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
+$ ./run.sh -k app-elfloader_qemu-x86_64_plain -r ../dynamic-apps/redis/ ../dynamic-apps/redis/lib64/ld-linux-x86-64.so.2 /usr/bin/redis-server /etc/redis/redis.conf
 [...]
 Powered by
 o.   .o       _ _               __ _
@@ -177,7 +177,7 @@ This is enabled by the `-g` option of the `run.sh` script, together with the use
 
 Note that GDB does not load ELF symbols automatically.
 To load those symbols, we need to know the start address which the ELF is loaded to.
-Run `run.sh` to find the start address and use the `app-elfloader_kvm-x86_64_full-debug` image.
+Run `run.sh` to find the start address and use the `app-elfloader_qemu-x86_64_full-debug` image.
 This differs depending on whether running a static PIE ELF or a dynamic ELF.
 
 #### Load Address for Static PIE ELFs
@@ -186,7 +186,7 @@ For a static PIE ELF, we need the to know where `app-elfloader` loads the ELF.
 So we do a full run of the `..._full-debug` variant of the `app-elfloader` and extract the corresponding debug message:
 
 ```console
-$ ./run.sh -k app-elfloader_kvm-x86_64_full-debug ../static-pie-apps/lang/c/helloworld
+$ ./run.sh -k app-elfloader_qemu-x86_64_full-debug ../static-pie-apps/lang/c/helloworld
 [...]
 [    0.351701] Info: [appelfloader] <main.c @  122> ELF program loaded to 0x400101000-0x4001d0860 (850016 B), entry at 0x40010afa0
 [...]
@@ -200,7 +200,7 @@ For a dynamic ELF, we need the to know where the Linux dynamic linker / loader l
 Similar to the static case, we do a full run of the `..._full-debug` variant of the `app-elfloader` and extract the corresponding debug message:
 
 ```console
-$ ./run.sh -k app-elfloader_kvm-x86_64_full-debug -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /helloworld
+$ ./run.sh -k app-elfloader_qemu-x86_64_full-debug -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /helloworld
 [...]
 openat(AT_FDCWD, "/helloworld", O_RDONLY|O_CLOEXEC) = fd:3
 read(fd:3, <out>"\x7FELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00>\x00\x01\x00\x00\x00"..., 832) = 832
@@ -217,7 +217,7 @@ To start a debugging session, run the `run.sh` script with the `-g` option.
 We show the case for a dynamic ELF, the same would apply for debugging static PIE ELF:
 
 ```console
-$ ./run.sh -g -k app-elfloader_kvm-x86_64_full-debug -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /helloworld
+$ ./run.sh -g -k app-elfloader_qemu-x86_64_full-debug -r ../dynamic-apps/lang/c/ ../dynamic-apps/lang/c/lib64/ld-linux-x86-64.so.2 /helloworld
 ```
 
 It will hang waiting for debugging inputs.
@@ -229,12 +229,12 @@ On another console, start the actual debugging interface with GDB by running the
 * the `.dbg` image of the ELF Loader
 
 ```console
-$ ./debug.sh -e ../dynamic-apps/lang/c/helloworld -o 0x1000002000 app-elfloader_kvm-x86_64_full-debug.dbg
+$ ./debug.sh -e ../dynamic-apps/lang/c/helloworld -o 0x1000002000 app-elfloader_qemu-x86_64_full-debug.dbg
 + gdb -ex 'set confirm off' -ex 'set pagination off' -ex 'set arch i386:x86-64:intel' -ex 'target remote localhost:1234' -ex 'add-symbol-file ../dynamic-apps/lang/c/helloworld -o 0x10
-00002000' -ex 'hbreak _ukplat_entry' -ex continue -ex 'delete 1' app-elfloader_kvm-x86_64_full-debug.dbg
+00002000' -ex 'hbreak _ukplat_entry' -ex continue -ex 'delete 1' app-elfloader_qemu-x86_64_full-debug.dbg
 GNU gdb (Ubuntu 10.2-0ubuntu1~18.04~2) 10.2
 [...]
-Reading symbols from app-elfloader_kvm-x86_64_full-debug.dbg...
+Reading symbols from app-elfloader_qemu-x86_64_full-debug.dbg...
 The target architecture is set to "i386:x86-64:intel".
 Remote debugging using localhost:1234
 0x000000000000fff0 in ?? ()
