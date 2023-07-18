@@ -101,7 +101,7 @@ exec_to_load="$1"
 
 arguments="-m 2G -nographic -nodefaults "
 arguments="${arguments}-display none -serial stdio -device isa-debug-exit "
-arguments="${arguments}-fsdev local,security_model=passthrough,id=hvirtio0,path=$rootfs_9p "
+arguments="${arguments}-fsdev local,security_model=none,id=hvirtio0,path=$rootfs_9p "
 arguments="${arguments}-device virtio-9p-pci,fsdev=hvirtio0,mount_tag=fs0 "
 arguments="${arguments}-kernel $kvm_image "
 
