@@ -178,6 +178,11 @@ run_bzip2()
     ./run.sh -d -r ../dynamic-apps/bzip2/ "$extra_args" /bin/bzip2 /test.txt
 }
 
+run_java()
+{
+    ./run.sh -d -r ../dynamic-apps/lang/java/ "$extra_args" /bin/java -cp helloworld HelloWorld
+}
+
 available_applications()
 {
     grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
