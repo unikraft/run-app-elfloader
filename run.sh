@@ -14,6 +14,7 @@ usage()
     echo "    -d - disable KVM" 1>&2
     echo "    -r - set path to 9pfs root filesystem" 1>&2
     echo "    -k - set path unikraft image" 1>&2
+    echo "    -a - appends a custom argument to the final QEMU command" 1>&2
     exit 1
 }
 
@@ -61,8 +62,9 @@ use_kvm=1
 use_networking=0
 use_initrd=0
 start_in_debug_mode=0
+custom_qemu_args=""
 
-while getopts "dhngik:r:" OPT; do
+while getopts "dhngik:r:a:" OPT; do
     case ${OPT} in
         n)
             use_networking=1
@@ -84,6 +86,9 @@ while getopts "dhngik:r:" OPT; do
             ;;
         i)
             use_initrd=1
+            ;;
+        a)
+            custom_qemu_args=${OPTARG}
             ;;
         *)
             usage
@@ -141,6 +146,8 @@ fi
 if test "$start_in_debug_mode" -eq 1; then
     arguments="${arguments}-s -S "
 fi
+
+arguments="${arguments} $custom_qemu_args "
 
 if test "$use_networking" -eq 1; then
     setup_networking
