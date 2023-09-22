@@ -76,42 +76,62 @@ run_gzip_static()
 
 run_helloworld()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/c/ "$extra_args" /helloworld
+    ./run.sh -d -r ../dynamic-apps/lang/c/helloworld "$extra_args" /helloworld
 }
 
 run_server()
 {
-    ./run.sh -d -n -r ../dynamic-apps/lang/c/ "$extra_args" /server
+    ./run.sh -d -n -r ../dynamic-apps/lang/c/client_server "$extra_args" /server
 }
 
 run_client()
 {
-    ./run.sh -d -n -r ../dynamic-apps/lang/c/ "$extra_args" /client 172.44.0.1 3333
+    ./run.sh -d -n -r ../dynamic-apps/lang/c/client_server "$extra_args" /client 172.44.0.1 3333
+}
+
+run_http_server()
+{
+    ./run.sh -d -n -r ../dynamic-apps/lang/c/http_server "$extra_args" /http_server
 }
 
 run_helloworld_go()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/go/ "$extra_args" /helloworld
+    ./run.sh -d -r ../dynamic-apps/lang/go/helloworld "$extra_args" /helloworld
 }
 
 run_server_go()
 {
-    ./run.sh -d -n -r ../dynamic-apps/lang/go/ "$extra_args" /server
+    ./run.sh -d -n -r ../dynamic-apps/lang/go/client_server "$extra_args" /server
 }
 
 run_client_go()
 {
-    ./run.sh -d -n -r ../dynamic-apps/lang/go/ "$extra_args" /client 172.44.0.1 3333
+    ./run.sh -d -n -r ../dynamic-apps/lang/go/client_server "$extra_args" /client 172.44.0.1 3333
+}
+
+run_http_server_go()
+{
+    ./run.sh -d -n -r ../dynamic-apps/lang/go/http_server "$extra_args" /http_server
 }
 
 run_helloworld_cpp()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/c++/ "$extra_args" /helloworld
+    ./run.sh -d -r ../dynamic-apps/lang/c++/helloworld "$extra_args" /helloworld
+}
+
+run_http_server_cpp()
+{
+    ./run.sh -d -r ../dynamic-apps/lang/c++/http_server "$extra_args" /http_server
 }
 
 run_helloworld_rust()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/rust/ "$extra_args" /helloworld
+    ./run.sh -d -r ../dynamic-apps/lang/rust/helloworld "$extra_args" /helloworld
+}
+
+run_http_server_rust()
+{
+    ./run.sh -d -r ../dynamic-apps/lang/rust/http_server "$extra_args" /http_server
 }
 
 run_bc()
@@ -121,9 +141,7 @@ run_bc()
 
 run_gzip()
 {
-    echo "test" > ../dynamic-apps/gzip/test.txt
-    sudo rm -f ../dynamic-apps/gzip/test.txt.gz
-    ./run.sh -d -r ../dynamic-apps/gzip/ "$extra_args" /bin/gzip /test.txt
+    ./run.sh -d -r ../dynamic-apps/gzip/ "$extra_args" /bin/gzip -k -f /input.txt
 }
 
 run_sqlite3()
@@ -148,12 +166,35 @@ run_redis7()
 
 run_python()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/python/ "$extra_args" /bin/python3.11
+    tar -C ../dynamic-apps/lang/python/ -xf ../dynamic-apps/lang/python/usr.tar.gz
+    ./run.sh -d -r ../dynamic-apps/lang/python/ "$extra_args" /python
+}
+
+run_helloworld_python()
+{
+    tar -C ../dynamic-apps/lang/python/ -xf ../dynamic-apps/lang/python/usr.tar.gz
+    ./run.sh -d -r ../dynamic-apps/lang/python/ "$extra_args" /python /helloworld.py
+}
+
+run_http_server_python()
+{
+    tar -C ../dynamic-apps/lang/python/ -xf ../dynamic-apps/lang/python/usr.tar.gz
+    ./run.sh -d -n -r ../dynamic-apps/lang/python/ "$extra_args" /python /http_server.py
+}
+
+run_helloworld_lua()
+{
+    ./run.sh -d -r ../dynamic-apps/lang/lua/ "$extra_args" /usr/bin/lua /helloworld.lua
+}
+
+run_helloworld_perl()
+{
+    ./run.sh -d -r ../dynamic-apps/lang/perl/ "$extra_args" /usr/bin/perl /hello.pl
 }
 
 run_openssl()
 {
-    ./run.sh -d -r ../dynamic-apps/openssl/ "$extra_args" /bin/openssl enc -aes-128-cbc -in /input.txt -out /input.enc -K 01020304050607080900010203040506 -iv 01020304050607080900010203040506
+    ./run.sh -d -r ../dynamic-apps/openssl/ "$extra_args" /usr/bin/openssl enc -aes-128-cbc -in /input.txt -out /input.enc -K 01020304050607080900010203040506 -iv 01020304050607080900010203040506
 }
 
 run_echo()
@@ -173,9 +214,17 @@ run_haproxy()
 
 run_bzip2()
 {
-    echo "test" > ../dynamic-apps/bzip2/test.txt
-    sudo rm -f ../dynamic-apps/bzip2/test.txt.bz2
-    ./run.sh -d -r ../dynamic-apps/bzip2/ "$extra_args" /bin/bzip2 /test.txt
+    ./run.sh -d -r ../dynamic-apps/bzip2/ "$extra_args" /bin/bzip2 -k -f /input.txt
+}
+
+run_ffmpeg()
+{
+    ./run.sh -d -r ../dynamic-apps/ffmpeg/ "$extra_args" /usr/bin/ffmpeg
+}
+
+run_gnupg()
+{
+    ./run.sh -d -r ../dynamic-apps/gnupg/ "$extra_args" /usr/bin/gpg -h --homedir /
 }
 
 available_applications()
