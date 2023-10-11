@@ -121,7 +121,7 @@ run_helloworld_cpp()
 
 run_http_server_cpp()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/c++/http_server "$extra_args" /http_server
+    ./run.sh -d -n -r ../dynamic-apps/lang/c++/http_server "$extra_args" /http_server
 }
 
 run_helloworld_rust()
@@ -131,7 +131,7 @@ run_helloworld_rust()
 
 run_http_server_rust()
 {
-    ./run.sh -d -r ../dynamic-apps/lang/rust/http_server "$extra_args" /http_server
+    ./run.sh -d -n -r ../dynamic-apps/lang/rust/http_server "$extra_args" /http_server
 }
 
 run_bc()
