@@ -227,6 +227,11 @@ run_gnupg()
     ./run.sh -d -r ../dynamic-apps/gnupg/ "$extra_args" /usr/bin/gpg -h --homedir /
 }
 
+run_java()
+{
+    ./run.sh -d -r ../dynamic-apps/lang/java/ "$extra_args" /bin/java -cp helloworld HelloWorld
+}
+
 available_applications()
 {
     grep -E "^run_.+\(\)\$" "$0" | sed 's/()//' | sed 's/run_//' | sort
